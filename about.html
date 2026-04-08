@@ -49,7 +49,6 @@
             padding: 0 25px;
         }
 
-        /* ===== HEADER (مطابق للصفحة الرئيسية) ===== */
         header {
             background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             color: var(--light);
@@ -133,7 +132,6 @@
             background-color: rgba(255, 255, 255, 0.12);
         }
 
-        /* ===== MAIN CONTENT ===== */
         .about-hero {
             flex: 1;
             padding: 70px 0 90px;
@@ -190,7 +188,6 @@
             color: var(--accent);
         }
 
-        /* بطاقة المحتوى الرئيسية */
         .about-card {
             max-width: 1100px;
             margin: 0 auto;
@@ -298,7 +295,6 @@
             margin-top: 30px;
         }
 
-        /* ===== FOOTER ===== */
         footer {
             background: var(--primary-dark);
             color: white;
@@ -411,7 +407,6 @@
             </div>
 
             <div class="about-card">
-                <!-- لمحة عامة -->
                 <div class="section-divider">
                     <h3 class="section-title-sm"><i class="fas fa-question-circle"></i> رؤيتنا</h3>
                     <p class="description-text">
@@ -420,7 +415,6 @@
                     </p>
                 </div>
 
-                <!-- فريق العمل والتقنيات -->
                 <div class="info-grid">
                     <div class="info-card">
                         <i class="fas fa-users"></i>
@@ -439,7 +433,6 @@
                     </div>
                 </div>
 
-                <!-- ملاحظة مهمة (إخلاء مسؤولية) -->
                 <div class="warning-note">
                     <div style="display: flex; gap: 15px; align-items: flex-start;">
                         <i class="fas fa-info-circle" style="color: var(--warning); font-size: 1.6rem;"></i>
@@ -450,7 +443,6 @@
                     </div>
                 </div>
 
-                <!-- تواصل واقتراحات -->
                 <div style="margin-top: 45px;">
                     <h3 class="section-title-sm"><i class="fas fa-phone-alt"></i> المساهمة والتواصل</h3>
                     <p class="description-text">نرحب بملاحظاتكم ومقترحاتكم لتطوير المنصة. يمكنكم مراسلتنا أو الإبلاغ عن أي خطأ في البيانات عبر القنوات التالية:</p>
@@ -523,7 +515,6 @@
     </footer>
 
     <script>
-        // معالجة الصورة الافتراضية للشعار إن لم توجد
         (function() {
             const logoImg = document.querySelector('.logo-image');
             if (logoImg && logoImg.complete && logoImg.naturalWidth === 0) {
@@ -531,7 +522,7 @@
             } else if (logoImg) {
                 logoImg.onerror = () => { logoImg.style.display = 'none'; };
             }
-            // تعيين الفئة النشطة للروابط يدوياً
+
             const currentPage = window.location.pathname.split('/').pop() || 'about.html';
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
