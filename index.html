@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CITY BUS | مسار حافلات مكناس</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-dark: #0d3b66;
+            --primary: #1d4e89;
+            --primary-light: #2a6db0;
+            --primary-extra-light: #e8f1f8;
+            --secondary: #f8f9fa;
+            --accent: #4a90e2;
+            --dark: #1a1a2e;
+            --light: #ffffff;
+            --gray-light: #f0f4f8;
+            --gray: #8a9aaf;
+            --gray-dark: #5a6c7d;
+            --shadow: rgba(13, 59, 102, 0.08);
+            --shadow-hover: rgba(13, 59, 102, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: var(--light);
+            padding: 18px 0;
+            box-shadow: 0 4px 20px rgba(13, 59, 102, 0.15);
+            position: relative;
+            z-index: 1100;
+            flex-shrink: 0;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: var(--transition);
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-image {
+            height: 50px;        
+            width: auto;          
+            display: block;
+            transition: var(--transition);
+        }
+
+        .logo:hover .logo-image {
+            transform: scale(1.02);
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .logo-text span {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 30px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            width: 100%;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .map-section {
+            flex: 0 0 80vh;        
+            position: relative;
+            width: 100%;
+            min-height: 0;
+            background: #eef2f6;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            background: #ccc;
+            z-index: 1;
+        }
+
+        .bus-info-bar {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 12px 20px;
+            border-radius: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            border-right: 5px solid #fd3b66;
+        }
+        .bus-info-bar i {
+            color: #fd3b66;
+            font-size: 1.4rem;
+        }
+
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+        .leaflet-control-zoom {
+            border: none !important;
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1) !important;
+            margin: 20px !important;
+        }
+        .leaflet-control-zoom a {
+            background: white !important;
+            color: var(--primary-dark) !important;
+            border: none !important;
+            border-radius: 0 !important;
+            width: 35px !important;
+            height: 35px !important;
+            line-height: 35px !important;
+        }
+        .leaflet-popup-content {
+            font-family: 'Tajawal', sans-serif !important;
+            text-align: right !important;
+            direction: rtl;
+        }
+
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 40px 0 25px;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        .contact-split {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .contact-group h4 {
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .contact-group .footer-links {
+            margin-top: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 20px; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+            nav a { padding: 8px 15px; font-size: 0.9rem; }
+            .bus-info-bar { bottom: 10px; right: 10px; padding: 8px 15px; font-size: 0.9rem; }
+            .map-section { flex-basis: 70vh; } /* slightly less on mobile for footer */
+        }
+
+        .search-bar {
+            background: white;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .bus-selector {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .bus-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e0e7ef;
+            border-radius: 40px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--light);
+            color: var(--dark);
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(42,109,176,0.1);
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(13,59,102,0.15);
+            white-space: nowrap;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13,59,102,0.25);
+        }
+
+        .feedback-message {
+            margin-top: 8px;
+            min-height: 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <img src="static/logo.png" alt="City Bus Logo" class="logo-image" alt="logo">
+                    <div class="logo-text">
+                        <span>الدليل الشامل للنقل الحضري</span>
+                    </div>
+                </a>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link active">
+                            <i class="fas fa-home"></i> الرئيسية
+                        </a></li>
+                        <li><a href="all_buses.html" class="nav-link">
+                            <i class="fas fa-bus"></i> جميع الحافلات
+                        </a></li>
+                        <li><a href="about.html" class="nav-link">
+                            <i class="fas fa-info-circle"></i> عن المشروع
+                        </a></li>
+                        <li><a href="report.html" class="nav-link">
+                            <i class="fas fa-edit"></i> اقتراح تعديل
+                        </a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="search-bar">
+        <div class="container" style="display: flex; justify-content: center; padding: 15px 25px;">
+            <div class="bus-selector">
+                <label for="busNumberInput"><i class="fas fa-bus"></i> رقم الحافلة</label>
+                <div class="input-group">
+                    <input type="text" id="busNumberInput" placeholder="مثال: 17" value="17" list="busNumbersList">
+                    <datalist id="busNumbersList">
+                        <option value="17">17 - تولال → حي مولاي اسماعيل</option>
+                    </datalist>
+                    <button class="btn-search" id="searchBusBtn">
+                        <i class="fas fa-search"></i> عرض المسار
+                    </button>
+                </div>
+                <div id="searchFeedback" class="feedback-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="map-section">
+        <div id="map"></div>
+
+        <div class="bus-info-bar">
+            <i class="fas fa-bus"></i>
+            <span>حافلة 17 : تولال ← حي مولاي اسماعيل | 18 محطة</span>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CITY BUS</h3>
+                    <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 15px;">
+                        الدليل الشامل للنقل الحضري لمدينة مكناس وضواحيها. معلومات دقيقة ومحدثة لجميع الخطوط.
+                    </p>
+                    <p style="color: rgba(255, 255, 255, 0.75); font-size: 0.95rem;">
+                        <i class="fas fa-code"></i> من إنجاز: 
+                        <strong style="color: white;">رضا والحمري بنادي المعلوميات بالمدرسة العليا للأساتذة,يندرج تحت المشاريع المنجزة لسنة 2026 </strong>
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> الرئيسية</a></li>
+                        <li><a href="all_buses.html"><i class="fas fa-chevron-left"></i> جميع الحافلات</a></li>
+                        <li><a href="about.html"><i class="fas fa-chevron-left"></i> عن المشروع</a></li>
+                        <li><a href="report.html"><i class="fas fa-chevron-left"></i> اقتراح تعديل</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>تواصل معنا</h3>
+                    <div class="contact-split">
+                        <div class="contact-group">
+                            <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-user-cog"></i> المبرمج
+                            </h4>
+                            <ul class="footer-links">
+                                <li><a href="https://github.com/redaoulhamri" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                                <li><a href="https://www.linkedin.com/in/reda-oulhamri/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                                <li><a href="https://redaoulhamri.github.io/portfolio/" target="_blank"><i class="fas fa-globe"></i> Portfolio</a></li>
+                            </ul>
+                        </div>
+                        <div class="contact-group">
+                            <h4 style="color: var(--accent); margin: 20px 0 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-users"></i> نادي المطورين
+                            </h4>
+                            <ul class="footer-links">
+                                <li><a href="http://wwww.developperguild.com" target="_blank"><i class="fas fa-globe"></i> موقع النادي</a></li>
+                                <li><a href="https://github.com/developperguild/" target="_blank"><i class="fab fa-github"></i> GitHub النادي</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 CITY BUS. جميع الحقوق محفوظة.</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">تم تحديث البيانات بناءً على المعلومات المتاحة لجميع خطوط الحافلات</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="buses.js"></script>
+    <script>
+        const map = L.map('map', {
+            attributionControl: false,
+            zoomControl: false,
+            minZoom: 12,
+            maxZoom: 18
+        }).setView([33.88, -5.59], 13);
+
+        L.control.zoom({ position: 'topright' }).addTo(map);
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri',
+            maxZoom: 19
+        }).addTo(map);
+
+        let currentMarkers = [];
+        let currentPolylines = [];
+
+        function showBusRoute(busNumber) {
+            currentMarkers.forEach(m => map.removeLayer(m));
+            currentPolylines.forEach(l => map.removeLayer(l));
+            currentMarkers = [];
+            currentPolylines = [];
+
+            const bus = buses[busNumber];
+            if (!bus) {
+                document.getElementById('searchFeedback').innerHTML =
+                    `<i class="fas fa-exclamation-triangle"></i> الحافلة رقم ${busNumber} غير موجودة في قاعدة البيانات.`;
+                document.getElementById('searchFeedback').className = 'feedback-message error';
+                return false;
+            }
+
+            const color1 = bus.color1 || "#fd3b66";
+            const color2 = bus.color2 || bus.color1 || "#1d4e89";
+
+            const trajet1 = (bus.trajet_1 || []).filter(coord => coord.length === 2);
+            const trajet2 = (bus.trajet_2 || []).filter(coord => coord.length === 2);
+            const labels1 = bus.stops1_label || [];
+            const labels2 = bus.stops2_label || [];
+
+            function addMarkers(coords, labels, color, offsetIndex) {
+                coords.forEach((coord, idx) => {
+                    const label = labels[idx] || `محطة ${offsetIndex + idx + 1}`;
+                    const stopNumber = offsetIndex + idx + 1;
+
+                    const markerHtml = `
+                        <div style="
+                            background: ${color};
+                            color: white;
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: bold;
+                            font-size: 14px;
+                            border: 3px solid white;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                        ">
+                            <i class="fas fa-bus" style="font-size: 16px;"></i>
+                        </div>
+                    `;
+                    const icon = L.divIcon({ html: markerHtml, className: '', iconSize: [32,32], iconAnchor: [16,32] });
+
+                    const marker = L.marker(coord, { icon }).addTo(map);
+                    marker.bindPopup(`
+                        <div style="text-align: right; min-width: 200px;">
+                            <strong style="color: ${color};">${label}</strong><br>
+                            <small>حافلة ${busNumber} · المحطة ${stopNumber}</small>
+                            <hr>
+                            <span><i class="fas fa-map-marker-alt"></i> ${coord[0].toFixed(5)}, ${coord[1].toFixed(5)}</span>
+                        </div>
+                    `);
+                    currentMarkers.push(marker);
+                });
+            }
+
+            addMarkers(trajet1, labels1, color1, 0);
+            addMarkers(trajet2, labels2, color2, trajet1.length);
+
+            function drawRoute(coords, routeColor, fitMap) {
+                if (coords.length < 2) return;
+
+                const coordString = coords.map(c => c[1] + ',' + c[0]).join(';');
+                const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordString}?overview=full&geometries=geojson&steps=false`;
+
+                fetch(osrmUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.code === 'Ok' && data.routes[0]) {
+                            const latlngs = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+                            const polyline = L.polyline(latlngs, { color: routeColor, weight: 5, opacity: 0.85 }).addTo(map);
+                            currentPolylines.push(polyline);
+                            if (fitMap) map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+                        } else {
+                            fallbackStraight(coords, routeColor, fitMap);
+                        }
+                    })
+                    .catch(() => fallbackStraight(coords, routeColor, fitMap));
+            }
+
+            function fallbackStraight(coords, routeColor, fitMap) {
+                const polyline = L.polyline(coords.map(c => [c[0], c[1]]), { color: routeColor, weight: 5, opacity: 0.85 }).addTo(map);
+                currentPolylines.push(polyline);
+                if (fitMap) map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+            }
+
+            drawRoute(trajet1, color1, true);
+            if (trajet2.length >= 2) drawRoute(trajet2, color2, false);
+
+            const infoBar = document.querySelector('.bus-info-bar span');
+            if (infoBar) {
+                infoBar.innerHTML = `حافلة ${busNumber} : ${bus.from || ''} ← ${bus.to || ''} | ${trajet1.length + trajet2.length} محطة`;
+            }
+
+            document.getElementById('searchFeedback').innerHTML =
+                `<i class="fas fa-check-circle"></i> تم عرض مسار الحافلة رقم ${busNumber}`;
+            document.getElementById('searchFeedback').className = 'feedback-message success';
+            return true;
+        }
+
+        function searchAndShowRoute() {
+            const input = document.getElementById('busNumberInput');
+            const busNumber = input.value.trim();
+            if (!busNumber) {
+                document.getElementById('searchFeedback').innerHTML = '<i class="fas fa-info-circle"></i> الرجاء إدخال رقم الحافلة';
+                document.getElementById('searchFeedback').className = 'feedback-message error';
+                return;
+            }
+            showBusRoute(busNumber);
+        }
+
+        document.getElementById('searchBusBtn').addEventListener('click', searchAndShowRoute);
+        document.getElementById('busNumberInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') searchAndShowRoute();
+        });
+
+        function updateDatalist() {
+            const datalist = document.getElementById('busNumbersList');
+            datalist.innerHTML = '';
+            Object.keys(buses).sort((a,b) => parseInt(a) - parseInt(b)).forEach(num => {
+                const bus = buses[num];
+                const option = document.createElement('option');
+                option.value = num;
+                option.textContent = `${num} - ${bus.from || ''} → ${bus.to || ''}`;
+                datalist.appendChild(option);
+            });
+        }
+        updateDatalist();
+
+        window.addEventListener('load', () => {
+            showBusRoute('17');
+            document.getElementById('busNumberInput').value = '17';
+        });
+    </script>
+</body>
+</html>

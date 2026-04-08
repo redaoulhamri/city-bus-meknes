@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>CITY BUS | اقتراح تعديل - قريباً</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== BASE & VARIABLES (مطابق للصفحة الرئيسية) ===== */
+        :root {
+            --primary-dark: #0d3b66;
+            --primary: #1d4e89;
+            --primary-light: #2a6db0;
+            --primary-extra-light: #e8f1f8;
+            --secondary: #f8f9fa;
+            --accent: #4a90e2;
+            --dark: #1a1a2e;
+            --light: #ffffff;
+            --gray-light: #f0f4f8;
+            --gray: #8a9aaf;
+            --gray-dark: #5a6c7d;
+            --shadow: rgba(13, 59, 102, 0.08);
+            --shadow-hover: rgba(13, 59, 102, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: var(--light);
+            padding: 18px 0;
+            box-shadow: 0 4px 20px rgba(13, 59, 102, 0.15);
+            position: relative;
+            z-index: 1100;
+            flex-shrink: 0;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: var(--transition);
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-image {
+            height: 50px;        
+            width: auto;          
+            display: block;
+            transition: var(--transition);
+        }
+
+        .logo:hover .logo-image {
+            transform: scale(1.02);
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .logo-text span {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 30px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            width: 100%;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        /* MAIN CONTENT STYLES (منطقة التقرير و coming soon) */
+        .report-hero {
+            flex: 1;
+            padding: 60px 0 80px;
+            background: linear-gradient(145deg, #f9fbfd 0%, #f1f5f9 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* خلفية مزخرفة خفيفة */
+        .report-hero::before {
+            content: "🚧";
+            font-size: 280px;
+            opacity: 0.03;
+            position: absolute;
+            bottom: -40px;
+            left: -40px;
+            pointer-events: none;
+            transform: rotate(-8deg);
+            font-family: monospace;
+        }
+
+        .report-hero::after {
+            content: "✏️";
+            font-size: 220px;
+            opacity: 0.03;
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            pointer-events: none;
+            transform: rotate(12deg);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-title h2 {
+            font-size: 2.6rem;
+            color: var(--primary-dark);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(4px);
+            padding: 12px 32px;
+            border-radius: 80px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            border: 1px solid rgba(74,144,226,0.2);
+        }
+
+        .page-title h2 i {
+            color: var(--accent);
+            font-size: 2.2rem;
+        }
+
+        /* بطاقة COMING SOON الرائعة */
+        .coming-soon-card {
+            max-width: 780px;
+            margin: 0 auto;
+            background: var(--light);
+            border-radius: 56px;
+            box-shadow: 0 30px 50px rgba(13, 59, 102, 0.12), 0 8px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            padding: 50px 35px 60px;
+            position: relative;
+            z-index: 3;
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.4s;
+            border: 1px solid rgba(255,255,255,0.6);
+            backdrop-filter: blur(2px);
+        }
+
+        .coming-soon-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 40px 65px rgba(13, 59, 102, 0.2);
+        }
+
+        /* شارة / badge */
+        .soon-badge {
+            background: linear-gradient(125deg, var(--primary-light), var(--primary-dark));
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 28px;
+            box-shadow: 0 5px 12px rgba(29,78,137,0.3);
+        }
+
+        .soon-badge i {
+            margin-left: 8px;
+        }
+
+        /* أيقونة رئيسية متحركة */
+        .icon-animation {
+            margin: 20px 0 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .icon-animation i {
+            font-size: 5.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: floatIcon 3s ease-in-out infinite;
+            filter: drop-shadow(0 8px 15px rgba(29,78,137,0.2));
+        }
+
+        @keyframes floatIcon {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .coming-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 15px 0 15px;
+            background: linear-gradient(125deg, var(--primary-dark), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .coming-sub {
+            font-size: 1.25rem;
+            color: var(--gray-dark);
+            margin-bottom: 25px;
+            font-weight: 500;
+            border-bottom: 2px dashed var(--gray-light);
+            display: inline-block;
+            padding-bottom: 6px;
+        }
+
+        .description-text {
+            font-size: 1.05rem;
+            color: #2c3e4e;
+            background: var(--gray-light);
+            padding: 18px 22px;
+            border-radius: 38px;
+            margin: 30px 0 30px;
+            line-height: 1.7;
+            text-align: center;
+            border-right: 4px solid var(--accent);
+        }
+
+        .description-text i {
+            color: var(--accent);
+            margin-left: 8px;
+        }
+
+        /* تذييل صغير بمعلومات التواصل المستقبلية */
+        .future-contact {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .future-contact span {
+            background: var(--primary-extra-light);
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .future-contact span i {
+            color: var(--primary);
+        }
+
+        /* مؤثر نبض خفيف */
+        .pulse-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #fd3b66;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 1.5s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(253,59,102,0.5);}
+            70% { transform: scale(1.2); opacity: 0.3; box-shadow: 0 0 0 10px rgba(253,59,102,0);}
+            100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(253,59,102,0);}
+        }
+
+        /* FOOTER (مطابق تماماً) */
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 40px 0 25px;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        .contact-split {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .contact-group h4 {
+            font-weight: 600;
+            letter-spacing: normal;
+        }
+
+        .contact-group .footer-links {
+            margin-top: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 20px; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+            nav a { padding: 8px 15px; font-size: 0.9rem; }
+            .page-title h2 { font-size: 1.8rem; padding: 8px 20px; gap: 8px; }
+            .coming-soon-card { padding: 35px 20px; margin: 0 15px; }
+            .coming-title { font-size: 2.2rem; }
+            .report-hero { padding: 40px 0 60px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="static/logo.png" alt="City Bus Logo" class="logo-image" onerror="this.style.display='none'">
+                    <div class="logo-text">
+                        <span>الدليل الشامل للنقل الحضري</span>
+                    </div>
+                </a>
+                
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="nav-link">
+                            <i class="fas fa-home"></i> الرئيسية
+                        </a></li>
+                        <li><a href="all_buses.html" class="nav-link">
+                            <i class="fas fa-bus"></i> جميع الحافلات
+                        </a></li>
+                        <li><a href="about.html" class="nav-link">
+                            <i class="fas fa-info-circle"></i> عن المشروع
+                        </a></li>
+                        <li><a href="report.html" class="nav-link active">
+                            <i class="fas fa-edit"></i> اقتراح تعديل
+                        </a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي: اقتراح تعديل + تصميم COMING SOON -->
+    <div class="report-hero">
+        <div class="container">
+            <div class="page-title">
+                <h2><i class="fas fa-pen-ruler"></i> اقتراح تعديل <i class="fas fa-comment-dots"></i></h2>
+            </div>
+
+            <div class="coming-soon-card">
+                <div class="soon-badge">
+                    <i class="fas fa-cogs"></i> قيد الإعداد · Coming Soon
+                </div>
+
+                <div class="icon-animation">
+                    <i class="fas fa-tools"></i>
+                </div>
+
+                <div class="coming-title">
+                    قريباً جداً
+                </div>
+                <div class="coming-sub">
+                    <span class="pulse-dot"></span> منصة الإبلاغ عن الأخطاء واقتراح التعديلات
+                </div>
+
+                <div class="description-text">
+                    <i class="fas fa-bullhorn"></i> 
+                    نعمل حالياً على تطوير نظام تفاعلي يمكنك من إرسال ملاحظاتك حول مسارات الحافلات، المحطات، أو أي تعديل مقترح. 
+                    سيتم إطلاق الخاصية قريباً مع لوحة متطورة لتتبع الاقتراحات.
+                </div>
+
+                <div class="future-contact">
+                    <span><i class="fas fa-envelope-open-text"></i> راسلنا مؤقتاً: developperguild@gmail.com</span>
+                    <span><i class="fas fa-chart-line"></i> نسخة محسّنة قادمة 2026</span>
+                </div>
+                
+                <!-- عنصر تصميمي إضافي (icon ثانوي) -->
+                <div style="margin-top: 32px;">
+                    <i class="fas fa-arrow-down" style="color: var(--primary-light); opacity: 0.5; font-size: 1.8rem;"></i>
+                    <p style="font-size: 0.85rem; color: #7e8c9e; margin-top: 8px;">ترقبوا التحديث • شكراً لتفهمكم</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CITY BUS</h3>
+                    <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 15px;">
+                        الدليل الشامل للنقل الحضري لمدينة مكناس وضواحيها. معلومات دقيقة ومحدثة لجميع الخطوط.
+                    </p>
+                    <p style="color: rgba(255, 255, 255, 0.75); font-size: 0.95rem;">
+                        <i class="fas fa-code"></i> من إنجاز: 
+                        <strong style="color: white;">رضا والحمري بنادي المعلوميات بالمدرسة العليا للأساتذة,يندرج تحت المشاريع المنجزة لسنة 2026 </strong>
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-left"></i> الرئيسية</a></li>
+                        <li><a href="all_buses.html"><i class="fas fa-chevron-left"></i> جميع الحافلات</a></li>
+                        <li><a href="about.html"><i class="fas fa-chevron-left"></i> عن المشروع</a></li>
+                        <li><a href="report.html"><i class="fas fa-chevron-left"></i> اقتراح تعديل</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>تواصل معنا</h3>
+                    <div class="contact-split">
+                        <div class="contact-group">
+                            <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-user-cog"></i> المبرمج
+                            </h4>
+                            <ul class="footer-links">
+                                <li><a href="https://github.com/redaoulhamri" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                                <li><a href="https://www.linkedin.com/in/reda-oulhamri/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                                <li><a href="https://redaoulhamri.github.io/portfolio/" target="_blank"><i class="fas fa-globe"></i> Portfolio</a></li>
+                            </ul>
+                        </div>
+                        <div class="contact-group">
+                            <h4 style="color: var(--accent); margin: 20px 0 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-users"></i> نادي المطورين
+                            </h4>
+                            <ul class="footer-links">
+                                <li><a href="http://www.developperguild.com" target="_blank"><i class="fas fa-globe"></i> موقع النادي</a></li>
+                                <li><a href="https://github.com/developperguild/" target="_blank"><i class="fab fa-github"></i> GitHub النادي</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 CITY BUS. جميع الحقوق محفوظة.</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">تم تحديث البيانات بناءً على المعلومات المتاحة لجميع خطوط الحافلات</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'report.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+                    link.classList.add('active');
+                } else if (currentPage === 'report.html' && href === 'report.html') {
+                    link.classList.add('active');
+                } else if (currentPage === 'index.html' && href === 'index.html') {
+                    link.classList.add('active');
+                } else if (currentPage === 'all_buses.html' && href === 'all_buses.html') {
+                    link.classList.add('active');
+                } else if (currentPage === 'about.html' && href === 'about.html') {
+                    link.classList.add('active');
+                }
+            });
+
+            // إصلاح أي خطأ محتمل للصورة (في حال عدم وجود شعار)
+            const logoImg = document.querySelector('.logo-image');
+            if (logoImg && logoImg.complete && logoImg.naturalWidth === 0) {
+                logoImg.style.display = 'none';
+            } else if (logoImg) {
+                logoImg.onerror = () => { logoImg.style.display = 'none'; };
+            }
+        })();
+    </script>
+</body>
+</html>
