@@ -41,7 +41,6 @@
             flex-direction: column;
         }
 
-        /* HEADER */
         header {
             background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             color: var(--light);
@@ -142,7 +141,6 @@
             background-color: rgba(255, 255, 255, 0.12);
         }
 
-        /* MAIN CONTENT STYLES (منطقة التقرير و coming soon) */
         .report-hero {
             flex: 1;
             padding: 60px 0 80px;
@@ -151,7 +149,6 @@
             overflow: hidden;
         }
 
-        /* خلفية مزخرفة خفيفة */
         .report-hero::before {
             content: "🚧";
             font-size: 280px;
@@ -203,7 +200,6 @@
             font-size: 2.2rem;
         }
 
-        /* بطاقة COMING SOON الرائعة */
         .coming-soon-card {
             max-width: 780px;
             margin: 0 auto;
@@ -224,7 +220,6 @@
             box-shadow: 0 40px 65px rgba(13, 59, 102, 0.2);
         }
 
-        /* شارة / badge */
         .soon-badge {
             background: linear-gradient(125deg, var(--primary-light), var(--primary-dark));
             display: inline-block;
@@ -242,7 +237,6 @@
             margin-left: 8px;
         }
 
-        /* أيقونة رئيسية متحركة */
         .icon-animation {
             margin: 20px 0 20px;
             position: relative;
@@ -303,7 +297,6 @@
             margin-left: 8px;
         }
 
-        /* تذييل صغير بمعلومات التواصل المستقبلية */
         .future-contact {
             display: flex;
             justify-content: center;
@@ -328,7 +321,6 @@
             color: var(--primary);
         }
 
-        /* مؤثر نبض خفيف */
         .pulse-dot {
             display: inline-block;
             width: 12px;
@@ -346,7 +338,6 @@
             100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(253,59,102,0);}
         }
 
-        /* FOOTER (مطابق تماماً) */
         footer {
             background: var(--primary-dark);
             color: white;
@@ -466,7 +457,6 @@
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي: اقتراح تعديل + تصميم COMING SOON -->
     <div class="report-hero">
         <div class="container">
             <div class="page-title">
@@ -500,7 +490,6 @@
                     <span><i class="fas fa-chart-line"></i> نسخة محسّنة قادمة 2026</span>
                 </div>
                 
-                <!-- عنصر تصميمي إضافي (icon ثانوي) -->
                 <div style="margin-top: 32px;">
                     <i class="fas fa-arrow-down" style="color: var(--primary-light); opacity: 0.5; font-size: 1.8rem;"></i>
                     <p style="font-size: 0.85rem; color: #7e8c9e; margin-top: 8px;">ترقبوا التحديث • شكراً لتفهمكم</p>
@@ -585,7 +574,6 @@
                 }
             });
 
-            // إصلاح أي خطأ محتمل للصورة (في حال عدم وجود شعار)
             const logoImg = document.querySelector('.logo-image');
             if (logoImg && logoImg.complete && logoImg.naturalWidth === 0) {
                 logoImg.style.display = 'none';
