@@ -20,10 +20,7 @@
 ```
 city-bus/
 │
-├── static/
-│   ├── logo.png
-│
-│
+├── logo.png
 ├── buses.js      ← قاعدة بيانات جميع الخطوط
 ├── index.html
 ├── all_buses.html
@@ -58,4 +55,3 @@ city-bus/
 
 ---
 
-© 2026 CITY BUS. جميع الحقوق محفوظة.
